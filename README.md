@@ -1,40 +1,38 @@
 # LightGBM Time Series Forecasting
 
-A Python project for data science and time series forecasting built with **LightGBM**, managed with **`uv`**, and integrated with **Google Cloud Platform (GCP)** and **Microsoft Azure**.
+Hi there! 👋 This is a project where I explore time series forecasting using LightGBM. It includes feature engineering (lags, rolling averages, calendar dynamics), model training, and simple pipelines for saving artifacts over to Google Cloud (GCS & BigQuery) and Microsoft Azure (Blob Storage).
+
+I used `uv` to keep package management fast and reliable.
 
 ---
 
-## 📌 Project Overview
+## What's in this repo
 
-This repository implements a time series forecasting workflow using gradient boosted decision trees (LightGBM):
-- **Data & Feature Engineering**: Creates calendar dynamics, lag features, and rolling window statistics from temporal data.
-- **Model Training & Evaluation**: Fits a LightGBM regressor using out-of-time train/test splits and evaluates metrics (RMSE, MAE, MAPE).
-- **Cloud Pipelines**: Includes export utilities for saving model checkpoints and predictions to Google Cloud Platform (Cloud Storage, BigQuery) and Microsoft Azure (Blob Storage).
-- **Infrastructure as Code**: Terraform configurations for cloud resource setup.
+- **`src/forecast_demo.py`**: Demo script that generates sample time series data, builds lag and rolling window features, trains a LightGBM regressor, and outputs standard evaluation metrics (RMSE, MAE, MAPE).
+- **`src/cloud_pipeline.py`**: A helper script to save metrics and data artifacts to GCP and Azure storage.
+- **`infrastructure/main.tf`**: A simple Terraform script to set up cloud buckets and datasets.
 
 ---
 
-## 🛠️ Quick Start
+## Quick Start
 
-### 1. Installation
-Ensure `uv` is installed, then build the virtual environment:
-```bash
-uv sync
-```
+1. **Install dependencies**:
+   ```bash
+   uv sync
+   ```
 
-### 2. Run Forecasting Demo
-Execute the time series forecasting script:
-```bash
-uv run python src/forecast_demo.py
-```
+2. **Run the forecasting model**:
+   ```bash
+   uv run python src/forecast_demo.py
+   ```
 
-### 3. Run Cloud Export Pipeline
-```bash
-uv run python src/cloud_pipeline.py --provider both
-```
+3. **Run the cloud export script**:
+   ```bash
+   uv run python src/cloud_pipeline.py --provider both
+   ```
 
 ---
 
-## 🤖 Disclosure
+## Note
 
-AI agents were utilized for parts of the project setup, code structuring, dependency configuration, and pipeline generation.
+I put this project together to work on time series forecasting and multi-cloud workflows. AI coding tools were used to help scaffold parts of the project setup and code structure.
