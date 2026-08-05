@@ -1,0 +1,14 @@
+{
+  "model": "Optuna-Tuned LightGBM Regressor",
+  "best_rmse": 7.7581,
+  "best_hyperparameters": {
+    "n_estimators": 1000,
+    "learning_rate": 0.04405330147112692,
+    "num_leaves": 63,
+    "max_depth": 10,
+    "subsample": 0.8348859112124439,
+    "colsample_bytree": 0.8032489759269821,
+    "min_child_samples": 40
+  },
+  "timestamp": "2026-08-05T15:08:55.269490"
+}
