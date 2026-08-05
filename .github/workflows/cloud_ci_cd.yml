@@ -1,0 +1,61 @@
+name: Multi-Cloud ML Pipeline (GCP & Azure)
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build-test-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          uv sync
+
+      - name: Run Time Series Forecasting Pipeline
+        run: |
+          uv run python src/forecast_demo.py
+
+      # ------------------------------------------------------------------------
+      # Google Cloud Platform (GCP) Deployment Step
+      # ------------------------------------------------------------------------
+      - name: Authenticate to Google Cloud
+        if: github.ref == 'refs/heads/master' && env.GCP_SA_KEY != ''
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Deploy Artifacts to GCP Cloud Storage
+        if: github.ref == 'refs/heads/master' && env.GCP_SA_KEY != ''
+        run: |
+          uv run python src/cloud_pipeline.py --provider gcp
+
+      # ------------------------------------------------------------------------
+      # Microsoft Azure Deployment Step
+      # ------------------------------------------------------------------------
+      - name: Log in to Azure CLI
+        if: github.ref == 'refs/heads/master' && env.AZURE_CREDENTIALS != ''
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Artifacts to Azure Blob Storage
+        if: github.ref == 'refs/heads/master' && env.AZURE_CREDENTIALS != ''
+        run: |
+          uv run python src/cloud_pipeline.py --provider azure
