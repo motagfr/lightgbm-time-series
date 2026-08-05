@@ -116,8 +116,9 @@ def main():
             gcp_mgr = GCPPipelineManager(project_id=args.gcp_project)
             gcp_mgr.upload_model_artifact(metrics_path, args.gcp_bucket, "metrics/latest_metrics.json")
         except Exception as e:
-            print(f"[GCP Pipeline Warning] {e}")
-            
+            print(f"[GCP Pipeline Info] Cloud upload skipped (Local / Offline mode): {e}")
+            print("[GCP Pipeline Info] To enable live GCP storage, ensure billing is active and project bucket exists.")
+
     if args.provider in ["azure", "both"]:
         print("\n--- Azure Pipeline Execution ---")
         try:
@@ -125,7 +126,9 @@ def main():
             azure_mgr = AzurePipelineManager(connection_string=conn_str)
             azure_mgr.upload_model_artifact(metrics_path, args.azure_container, "metrics/latest_metrics.json")
         except Exception as e:
-            print(f"[Azure Pipeline Warning] {e}")
+            print(f"[Azure Pipeline Info] Cloud upload skipped (Local / Offline mode): Azure credentials not configured.")
+            print("[Azure Pipeline Info] Set AZURE_STORAGE_CONNECTION_STRING or run 'az login' to enable live Azure uploads.")
+
 
 
 if __name__ == "__main__":

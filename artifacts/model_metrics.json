@@ -1,0 +1,8 @@
+{
+  "model": "LightGBM Regressor",
+  "task": "Time Series Forecasting",
+  "rmse": 8.4606,
+  "mae": 6.5768,
+  "mape_percent": 4.56,
+  "timestamp": "2026-08-05T14:01:08.840148"
+}
