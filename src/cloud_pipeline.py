@@ -7,9 +7,17 @@ to both Google Cloud Platform (GCS / BigQuery) and Microsoft Azure (Blob Storage
 
 import os
 import json
+import logging
+import warnings
 import argparse
 import pandas as pd
 from typing import Dict, Any, Optional
+
+# Mute SDK logging noise during local runs
+logging.getLogger("azure").setLevel(logging.ERROR)
+logging.getLogger("azure.identity").setLevel(logging.ERROR)
+logging.getLogger("azure.core").setLevel(logging.ERROR)
+warnings.filterwarnings("ignore")
 
 # GCP Imports
 try:
@@ -65,9 +73,11 @@ class AzurePipelineManager:
         if connection_string:
             self.blob_service_client = BlobServiceClient.from_connection_string(connection_string)
         else:
-            # Use Azure Default Credentials (Environment, Managed Identity, Azure CLI)
+            # Check if Azure credentials exist in environment before initializing DefaultAzureCredential
+            if not any(k in os.environ for k in ["AZURE_CLIENT_ID", "AZURE_STORAGE_CONNECTION_STRING", "AZURE_STORAGE_KEY", "AZURE_TENANT_ID"]):
+                raise ValueError("No Azure storage credentials or connection string found in environment variables.")
             account_url = os.getenv("AZURE_STORAGE_ACCOUNT_URL", "https://stlightgbmmotagfr.blob.core.windows.net")
-            credential = DefaultAzureCredential()
+            credential = DefaultAzureCredential(logging_enable=False)
             self.blob_service_client = BlobServiceClient(account_url, credential=credential)
 
     def upload_model_artifact(self, local_path: str, container_name: str, destination_blob: str):
@@ -128,7 +138,6 @@ def main():
         except Exception as e:
             print(f"[Azure Pipeline Info] Cloud upload skipped (Local / Offline mode): Azure credentials not configured.")
             print("[Azure Pipeline Info] Set AZURE_STORAGE_CONNECTION_STRING or run 'az login' to enable live Azure uploads.")
-
 
 
 if __name__ == "__main__":
