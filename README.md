@@ -8,6 +8,7 @@ I used `uv` to keep package management fast and reliable.
 
 ## What's in this repo
 
+- **`notebooks/lightgbm_time_series_forecasting.ipynb`**: Interactive Jupyter Notebook with full step-by-step EDA, feature engineering, model training, evaluation plots, and summary.
 - **`src/forecast_demo.py`**: Demo script that generates sample time series data, builds lag and rolling window features, trains a LightGBM regressor, and outputs standard evaluation metrics (RMSE, MAE, MAPE).
 - **`src/cloud_pipeline.py`**: A helper script to save metrics and data artifacts to GCP and Azure storage.
 - **`infrastructure/main.tf`**: A simple Terraform script to set up cloud buckets and datasets.
