@@ -5,11 +5,14 @@ Demonstrates time-series feature engineering (lags, rolling stats, calendar feat
 temporal train/test splitting, model training with LightGBM, and evaluation metrics (RMSE, MAE, MAPE).
 """
 
+import warnings
 import numpy as np
 import pandas as pd
 import lightgbm as lgb
 from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
 import matplotlib.pyplot as plt
+
+warnings.filterwarnings("ignore")
 
 
 def generate_synthetic_time_series(n_days: int = 730) -> pd.DataFrame:
